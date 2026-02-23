@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joaquin's Graduation Dinner 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              DEFAULT: '#2D5A27',
+              light:   '#3a7231',
+              dark:    '#1e3d1a',
+              muted:   '#e8f0e7',
+            }
+          },
+          fontFamily: {
+            serif: ['"Georgia"', 'Cambria', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Subtle leaf-pattern background */
+    body {
+      background-color: #f7faf6;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(45,90,39,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(45,90,39,0.06) 0%, transparent 50%);
+    }
+
+    /* Tab underline animation */
+    .tab-active {
+      border-bottom: 3px solid #2D5A27;
+      color: #2D5A27;
+      font-weight: 700;
+    }
+
+    /* Image polish */
+    .hero-img {
+      box-shadow: 0 20px 60px rgba(45,90,39,0.18), 0 4px 16px rgba(0,0,0,0.10);
+    }
+
+    /* Disabled tab */
+    .tab-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Calendar button hover */
+    .btn-calendar:hover {
+      background-color: #3a7231;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(45,90,39,0.30);
+    }
+    .btn-calendar {
+      transition: all 0.2s ease;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col font-sans text-gray-800">
+
+  <!-- ── TAB NAV ────────────────────────────────────────────────── -->
+  <nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+    <div class="max-w-2xl mx-auto flex">
+
+      <!-- Active Tab -->
+      <button
+        id="tab-details"
+        class="tab-active flex-1 py-3 text-sm sm:text-base text-center px-2 focus:outline-none"
+        onclick="switchTab('details')"
+      >
+        Event Details
+      </button>
+
+      <!-- Disabled / Coming Soon Tab -->
+      <div class="flex-1 relative group">
+        <button
+          class="tab-disabled w-full py-3 text-sm sm:text-base text-center px-2 text-gray-500 font-medium focus:outline-none"
+          disabled
+          aria-disabled="true"
+        >
+          RSVP &amp; Menu
+        </button>
+        <!-- Tooltip -->
+        <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1 z-20
+                    bg-forest text-white text-xs rounded px-3 py-1 whitespace-nowrap
+                    opacity-0 group-hover:opacity-100 pointer-events-none
+                    transition-opacity duration-200 shadow-lg">
+          ✨ Coming Soon
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+  <main class="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
+
+    <!-- EVENT DETAILS PANEL -->
+    <section id="panel-details">
+
+      <!-- Hero Image -->
+      <div class="flex justify-center mb-8">
+        <img
+          src="Joaquin.png"
+          alt="Joaquin's Graduation Celebration Save the Date"
+          class="hero-img rounded-2xl w-full max-w-md object-contain"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Details Note -->
+      <div class="text-center bg-white rounded-2xl border border-forest/20 shadow-sm px-6 py-7">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-forest-muted mb-4">
+          <!-- Calendar icon -->
+          <svg class="w-6 h-6 text-forest" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-serif font-semibold text-forest mb-2">More Details Coming Soon</h2>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          We're putting the finishing touches on all the details.<br/>
+          Check back soon for the full event info — date, time, and location!
+        </p>
+        <div class="mt-5 inline-flex items-center gap-2 bg-forest-muted text-forest text-xs font-semibold
+                    rounded-full px-4 py-2 tracking-wide uppercase">
+          <span class="w-2 h-2 bg-forest rounded-full animate-pulse"></span>
+          Details to Follow
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ────────────────────────────────────────────────── -->
+  <footer class="bg-white border-t border-gray-100 py-6 px-4">
+    <div class="max-w-2xl mx-auto flex flex-col items-center gap-4">
+
+      <!-- Add to Calendar placeholder -->
+      <button
+        class="btn-calendar bg-forest text-white font-semibold rounded-full
+               px-8 py-3 text-sm flex items-center gap-2 shadow-md"
+        onclick="alert('Calendar sync coming in Phase 2! 🗓️')"
+        aria-label="Add this event to your calendar"
+      >
+        <!-- Calendar icon -->
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <line x1="12" y1="15" x2="12" y2="15" stroke-linecap="round" stroke-width="3"/>
+        </svg>
+        Add to Calendar
+      </button>
+
+      <p class="text-xs text-gray-400 text-center">
+        Celebrating Joaquin &nbsp;·&nbsp; Miramonte High School Class of 2026<br/>
+        With love from Nana Rosita Apodaca
+      </p>
+    </div>
+  </footer>
+
+  <!-- ── TAB LOGIC ─────────────────────────────────────────────── -->
+  <script>
+    function switchTab(tab) {
+      // Currently only 'details' is active; keeping this for Phase 2
+      document.getElementById('tab-details').classList.add('tab-active');
+    }
+  </script>
+
+</body>
+</html>
