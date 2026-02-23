@@ -16,49 +16,66 @@
               dark:    '#1e3d1a',
               muted:   '#e8f0e7',
             }
-          },
-          fontFamily: {
-            serif: ['"Georgia"', 'Cambria', 'serif'],
           }
         }
       }
     }
   </script>
   <style>
-    /* Subtle leaf-pattern background */
     body {
       background-color: #f7faf6;
       background-image:
         radial-gradient(circle at 10% 20%, rgba(45,90,39,0.06) 0%, transparent 50%),
         radial-gradient(circle at 90% 80%, rgba(45,90,39,0.06) 0%, transparent 50%);
     }
-
-    /* Tab underline animation */
     .tab-active {
       border-bottom: 3px solid #2D5A27;
       color: #2D5A27;
       font-weight: 700;
     }
-
-    /* Image polish */
+    .tab-inactive {
+      border-bottom: 3px solid transparent;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    .tab-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
     .hero-img {
       box-shadow: 0 20px 60px rgba(45,90,39,0.18), 0 4px 16px rgba(0,0,0,0.10);
     }
-
-    /* Disabled tab */
-    .tab-disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
+    .btn-forest {
+      background-color: #2D5A27;
+      transition: all 0.2s ease;
     }
-
-    /* Calendar button hover */
-    .btn-calendar:hover {
+    .btn-forest:hover {
       background-color: #3a7231;
       transform: translateY(-1px);
       box-shadow: 0 6px 20px rgba(45,90,39,0.30);
     }
-    .btn-calendar {
-      transition: all 0.2s ease;
+    .form-input {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.15s;
+      background: white;
+    }
+    .form-input:focus {
+      border-color: #2D5A27;
+      box-shadow: 0 0 0 3px rgba(45,90,39,0.12);
+    }
+    .guest-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    @media (max-width: 480px) {
+      .guest-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -69,29 +86,24 @@
   <nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
     <div class="max-w-2xl mx-auto flex">
 
-      <!-- Active Tab -->
-      <button
-        id="tab-details"
+      <button id="tab-details"
         class="tab-active flex-1 py-3 text-sm sm:text-base text-center px-2 focus:outline-none"
-        onclick="switchTab('details')"
-      >
+        onclick="switchTab('details')">
         Event Details
       </button>
 
-      <!-- Disabled / Coming Soon Tab -->
+      <!-- RSVP tab — toggled by RSVP_ENABLED flag -->
       <div class="flex-1 relative group">
-        <button
-          class="tab-disabled w-full py-3 text-sm sm:text-base text-center px-2 text-gray-500 font-medium focus:outline-none"
-          disabled
-          aria-disabled="true"
-        >
+        <button id="tab-rsvp"
+          class="w-full py-3 text-sm sm:text-base text-center px-2 focus:outline-none tab-inactive"
+          onclick="switchTab('rsvp')">
           RSVP &amp; Menu
         </button>
-        <!-- Tooltip -->
-        <div class="absolute left-1/2 -translate-x-1/2 top-full mt-1 z-20
-                    bg-forest text-white text-xs rounded px-3 py-1 whitespace-nowrap
-                    opacity-0 group-hover:opacity-100 pointer-events-none
-                    transition-opacity duration-200 shadow-lg">
+        <div id="rsvp-tooltip"
+          class="absolute left-1/2 -translate-x-1/2 top-full mt-1 z-20
+                 bg-forest text-white text-xs rounded px-3 py-1 whitespace-nowrap
+                 opacity-0 group-hover:opacity-100 pointer-events-none
+                 transition-opacity duration-200 shadow-lg">
           ✨ Coming Soon
         </div>
       </div>
@@ -104,17 +116,96 @@
 
     <!-- EVENT DETAILS PANEL -->
     <section id="panel-details">
-
-      <!-- Hero Image -->
       <div class="flex justify-center">
-        <img
-          src="Joaquin.png"
+        <img src="Joaquin.png"
           alt="Joaquin's Graduation Celebration Save the Date"
           class="hero-img rounded-2xl w-full max-w-md object-contain"
-          loading="eager"
-        />
+          loading="eager" />
       </div>
+    </section>
 
+    <!-- RSVP PANEL (hidden until RSVP_ENABLED = true) -->
+    <section id="panel-rsvp" class="hidden">
+
+      <div class="bg-white rounded-2xl border border-forest/20 shadow-sm px-6 py-7 mb-6">
+        <h2 class="text-xl font-semibold text-forest mb-1">RSVP for Joaquin's Dinner</h2>
+        <p class="text-sm text-gray-500 mb-6">
+          Please RSVP by <strong>May 14, 2026</strong>. One submission per party is fine.
+        </p>
+
+        <form id="rsvp-form"
+          action="https://formspree.io/f/REPLACE_WITH_YOUR_ID"
+          method="POST"
+          onsubmit="handleSubmit(event)">
+
+          <!-- Contact info -->
+          <div class="space-y-4 mb-6">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                Your Name
+              </label>
+              <input type="text" name="contact_name" required placeholder="First and last name"
+                class="form-input" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                Your Email
+              </label>
+              <input type="email" name="contact_email" required placeholder="you@example.com"
+                class="form-input" />
+            </div>
+          </div>
+
+          <!-- Party size -->
+          <div class="mb-5">
+            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              How many in your party?
+            </label>
+            <select name="party_size" id="party-size" onchange="updateGuestRows()"
+              class="form-input w-auto">
+              <option value="1">1 — Just me</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6+</option>
+            </select>
+          </div>
+
+          <!-- Dynamic guest rows -->
+          <div class="mb-5">
+            <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+              Guest Details
+            </label>
+            <div id="guest-rows" class="space-y-3"></div>
+          </div>
+
+          <!-- Dietary notes -->
+          <div class="mb-6">
+            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              Dietary Restrictions or Notes
+            </label>
+            <textarea name="dietary_notes" rows="2"
+              placeholder="Allergies, vegetarian, gluten-free, etc. — or leave blank"
+              class="form-input resize-none"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit"
+            class="btn-forest w-full text-white font-semibold rounded-full py-3 text-sm shadow-md">
+            Submit RSVP
+          </button>
+
+        </form>
+
+        <!-- Success message (hidden until submitted) -->
+        <div id="rsvp-success" class="hidden text-center py-6">
+          <div class="text-4xl mb-3">🎉</div>
+          <h3 class="text-lg font-semibold text-forest mb-1">You're on the list!</h3>
+          <p class="text-sm text-gray-500">Thanks for RSVPing. We'll be in touch with final details soon.</p>
+        </div>
+
+      </div>
     </section>
 
   </main>
@@ -125,12 +216,10 @@
 
       <!-- Add to Calendar -->
       <div class="relative" id="cal-wrapper">
-        <button
-          class="btn-calendar bg-forest text-white font-semibold rounded-full
-                 px-8 py-3 text-sm flex items-center gap-2 shadow-md"
+        <button class="btn-forest text-white font-semibold rounded-full
+               px-8 py-3 text-sm flex items-center gap-2 shadow-md"
           onclick="toggleCalMenu()"
-          aria-label="Add this event to your calendar"
-        >
+          aria-label="Add this event to your calendar">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
             <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
@@ -142,21 +231,20 @@
           </svg>
         </button>
 
-        <!-- Dropdown -->
         <div id="cal-menu" class="hidden absolute bottom-full mb-2 left-1/2 -translate-x-1/2
                                   bg-white rounded-xl shadow-xl border border-gray-100
                                   w-52 overflow-hidden z-30">
           <a id="link-google" href="#" target="_blank"
-             class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
-                    hover:bg-forest-muted hover:text-forest transition-colors">
+            class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
+                   hover:bg-forest-muted hover:text-forest transition-colors">
             <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19.5 3h-15A1.5 1.5 0 003 4.5v15A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0019.5 3zm-7 13.5c-2.485 0-4.5-2.015-4.5-4.5S10.015 7.5 12.5 7.5 17 9.515 17 12s-2.015 4.5-4.5 4.5z"/>
             </svg>
             Google Calendar
           </a>
           <a id="link-ics" href="#"
-             class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
-                    hover:bg-forest-muted hover:text-forest transition-colors border-t border-gray-50">
+            class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700
+                   hover:bg-forest-muted hover:text-forest transition-colors border-t border-gray-50">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
@@ -176,21 +264,116 @@
 
   <!-- ── SCRIPTS ───────────────────────────────────────────────── -->
   <script>
-    // ── Tab logic (Phase 2 ready)
+
+    // ─────────────────────────────────────────────────────────────
+    // ✅ FLIP THIS TO true WHEN READY TO OPEN RSVP
+    const RSVP_ENABLED = false;
+    // ─────────────────────────────────────────────────────────────
+
+    // ── Menu options — update these once restaurant is confirmed
+    const MENU_OPTIONS = [
+      { value: "",        label: "Select entrée…" },
+      { value: "tbd_a",   label: "Option A — TBD" },
+      { value: "tbd_b",   label: "Option B — TBD" },
+      { value: "tbd_c",   label: "Option C — TBD" },
+      { value: "veggie",  label: "Vegetarian option" },
+    ];
+
+    // ── Apply RSVP tab state on load
+    (function initRSVP() {
+      const tabBtn   = document.getElementById('tab-rsvp');
+      const tooltip  = document.getElementById('rsvp-tooltip');
+      if (!RSVP_ENABLED) {
+        tabBtn.classList.add('tab-disabled');
+        tabBtn.disabled = true;
+      } else {
+        tooltip.style.display = 'none';
+      }
+      updateGuestRows(); // build first guest row
+    })();
+
+    // ── Tab switching
     function switchTab(tab) {
-      document.getElementById('tab-details').classList.add('tab-active');
+      if (tab === 'rsvp' && !RSVP_ENABLED) return;
+
+      document.getElementById('panel-details').classList.toggle('hidden', tab !== 'details');
+      document.getElementById('panel-rsvp').classList.toggle('hidden', tab !== 'rsvp');
+
+      document.getElementById('tab-details').className =
+        `flex-1 py-3 text-sm sm:text-base text-center px-2 focus:outline-none ` +
+        (tab === 'details' ? 'tab-active' : 'tab-inactive');
+      document.getElementById('tab-rsvp').className =
+        `w-full py-3 text-sm sm:text-base text-center px-2 focus:outline-none ` +
+        (tab === 'rsvp' ? 'tab-active' : 'tab-inactive') +
+        (!RSVP_ENABLED ? ' tab-disabled' : '');
     }
 
-    // ── Event details
+    // ── Build guest rows dynamically
+    function updateGuestRows() {
+      const count     = parseInt(document.getElementById('party-size').value) || 1;
+      const container = document.getElementById('guest-rows');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= count; i++) {
+        const row = document.createElement('div');
+        row.className = 'guest-row bg-gray-50 rounded-lg p-3 border border-gray-100';
+
+        const nameWrap = document.createElement('div');
+        nameWrap.innerHTML = `
+          <label class="text-xs text-gray-500 mb-1 block">Guest ${i} Name</label>
+          <input type="text" name="guest_${i}_name"
+            placeholder="First name" ${i === 1 ? 'required' : ''}
+            class="form-input text-sm" />`;
+
+        const menuWrap = document.createElement('div');
+        const opts = MENU_OPTIONS.map(o =>
+          `<option value="${o.value}">${o.label}</option>`).join('');
+        menuWrap.innerHTML = `
+          <label class="text-xs text-gray-500 mb-1 block">Entrée Selection</label>
+          <select name="guest_${i}_menu" class="form-input text-sm">${opts}</select>`;
+
+        row.appendChild(nameWrap);
+        row.appendChild(menuWrap);
+        container.appendChild(row);
+      }
+    }
+
+    // ── Form submission
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('rsvp-form');
+      const btn  = form.querySelector('button[type=submit]');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.classList.add('hidden');
+          document.getElementById('rsvp-success').classList.remove('hidden');
+        } else {
+          btn.textContent = 'Try again';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Try again';
+        btn.disabled = false;
+      }
+    }
+
+    // ── Event details (calendar)
     const EVENT = {
       title:    "Joaquin's Graduation Dinner",
-      start:    "20260528T190000",   // May 28 2026, 7:00 PM local
-      end:      "20260528T220000",   // 10:00 PM local
+      start:    "20260528T190000",
+      end:      "20260528T220000",
       location: "Lafayette / Walnut Creek, CA",
       details:  "Celebrating Joaquin's graduation from Miramonte High School. Hosted by Nana Rosita Apodaca."
     };
 
-    // ── Build Google Calendar URL
     document.getElementById('link-google').href =
       `https://calendar.google.com/calendar/render?action=TEMPLATE` +
       `&text=${encodeURIComponent(EVENT.title)}` +
@@ -198,45 +381,35 @@
       `&location=${encodeURIComponent(EVENT.location)}` +
       `&details=${encodeURIComponent(EVENT.details)}`;
 
-    // ── Build .ics blob for Apple / Outlook
     document.getElementById('link-ics').addEventListener('click', function(e) {
       e.preventDefault();
       const ics = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//JAG Grad 2026//EN",
+        "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JAG Grad 2026//EN",
         "BEGIN:VEVENT",
         `SUMMARY:${EVENT.title}`,
         `DTSTART;TZID=America/Los_Angeles:${EVENT.start}`,
         `DTEND;TZID=America/Los_Angeles:${EVENT.end}`,
         `LOCATION:${EVENT.location}`,
         `DESCRIPTION:${EVENT.details}`,
-        "STATUS:CONFIRMED",
-        "END:VEVENT",
-        "END:VCALENDAR"
+        "STATUS:CONFIRMED","END:VEVENT","END:VCALENDAR"
       ].join("\r\n");
-
       const blob = new Blob([ics], { type: 'text/calendar' });
       const url  = URL.createObjectURL(blob);
       const a    = document.createElement('a');
-      a.href     = url;
-      a.download = 'JAG-Grad-2026.ics';
-      a.click();
+      a.href = url; a.download = 'JAG-Grad-2026.ics'; a.click();
       URL.revokeObjectURL(url);
       toggleCalMenu();
     });
 
-    // ── Toggle dropdown
     function toggleCalMenu() {
       document.getElementById('cal-menu').classList.toggle('hidden');
     }
-
-    // ── Close dropdown on outside click
     document.addEventListener('click', function(e) {
       if (!document.getElementById('cal-wrapper').contains(e.target)) {
         document.getElementById('cal-menu').classList.add('hidden');
       }
     });
+
   </script>
 
 </body>
