@@ -22,8 +22,44 @@ Phase 1: Identity & GitHub Setup (Live "Save the Date" Landing Page). ✅ COMPLE
 - Forest Green + White theme, Tailwind CSS
 - Hero image (Joaquin.png) centered
 - Event Details tab (active) + RSVP & Menu tab (Coming Soon)
-- Add to Calendar placeholder in footer
+- Add to Calendar: Google Calendar + Apple/Outlook (.ics) — May 28, 7pm, Lafayette/Walnut Creek
+- Footer: Celebrating Joaquin · With love from Nana Rosita Apodaca
 
 Phase 2: Engagement Features (Smart Calendar & Orinda Map).
+- Update calendar location once restaurant is confirmed
+- Add interactive map (Lafayette / Walnut Creek area)
 
 Phase 3: Conversion (RSVP Form & Menu Reveal).
+- Formspree endpoint: https://formspree.io/f/xpqjoqpk (wired, ready)
+- RSVP form collects: contact name, email, party size, per-guest name + entrée, dietary notes
+- Success message shown after submit
+
+---
+
+## How to Preview & Test RSVP (before going live)
+
+1. Open index.html in your editor
+2. Find line ~270: `const RSVP_ENABLED = false;`
+3. Change to `true` — save the file
+4. Open the file in your browser to preview and test the form
+5. Submit a test entry — check andrew.apodaca@gmail.com for the Formspree email
+6. When happy, set back to `false` and push (keeps tab greyed out for guests)
+
+## How to Go Live with RSVP
+
+When restaurant + menu options are confirmed:
+
+1. Update menu options in index.html (~lines 274–280):
+   Replace "Option A/B/C — TBD" with real dish names
+
+2. Update restaurant location in index.html (~line 373):
+   Replace "Lafayette / Walnut Creek, CA" with exact restaurant name + address
+
+3. Update calendar location (~line 374) with same address
+
+4. Set RSVP_ENABLED = true (~line 270)
+
+5. Push live:
+   bash deploy.sh "Open RSVP — [Restaurant Name]"
+
+6. Update RSVP deadline if needed (~line 133): currently "May 14, 2026"
