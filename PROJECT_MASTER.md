@@ -36,6 +36,10 @@ Phase 3: Conversion (RSVP Form & Menu Reveal).
 
 ---
 
+## RSVP Submissions (Organizer View)
+- Log in at formspree.io → JAG-Grad-2026 → Submissions tab
+- View, download CSV, or share from there — no custom admin page needed
+
 ## How to Preview & Test RSVP (before going live)
 
 1. Open index.html in your editor
