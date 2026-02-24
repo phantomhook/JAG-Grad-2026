@@ -133,6 +133,36 @@
           class="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-white ring-2 ring-forest/20" />
       </div>
 
+      <!-- Menu Preview -->
+      <div class="bg-white rounded-2xl border border-forest/20 shadow-sm px-6 py-5 mb-5">
+        <h3 class="text-xs font-bold text-forest uppercase tracking-widest mb-4">The Menu</h3>
+        <div class="space-y-3 text-sm">
+          <div>
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Shared to Start</p>
+            <p class="text-gray-700">Warm Shaved Brussels Sprouts &nbsp;·&nbsp; Heirloom Tomato &amp; Burrata</p>
+          </div>
+          <div class="border-t border-gray-50 pt-3">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Salad</p>
+            <p class="text-gray-700">Caesar</p>
+          </div>
+          <div class="border-t border-gray-50 pt-3">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Entrées <span class="normal-case font-normal text-gray-400">(your choice on the night)</span></p>
+            <ul class="text-gray-700 space-y-0.5">
+              <li>Coop Fried Chicken</li>
+              <li>Pasta Bolognese</li>
+              <li>Atlantic Salmon</li>
+              <li>Steak Frites</li>
+              <li>Eggplant Parmesan <span class="text-xs text-gray-400">(vegetarian)</span></li>
+            </ul>
+          </div>
+          <div class="border-t border-gray-50 pt-3">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Dessert</p>
+            <p class="text-gray-700">Pear Bread Pudding with Ice Cream</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RSVP Form -->
       <div class="bg-white rounded-2xl border border-forest/20 shadow-sm px-6 py-7 mb-6">
         <h2 class="text-xl font-semibold text-forest mb-1">RSVP for Joaquin's Dinner</h2>
         <p class="text-sm text-gray-500 mb-3">
@@ -154,28 +184,21 @@
           <!-- Contact info -->
           <div class="space-y-4 mb-6">
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-                Your Name
-              </label>
-              <input type="text" name="contact_name" required placeholder="First and last name"
-                class="form-input" />
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Your Name</label>
+              <input type="text" name="contact_name" required placeholder="First and last name" class="form-input" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-                Your Email
-              </label>
-              <input type="email" name="contact_email" required placeholder="you@example.com"
-                class="form-input" />
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Your Email</label>
+              <input type="email" name="contact_email" required placeholder="you@example.com" class="form-input" />
             </div>
           </div>
 
           <!-- Party size -->
-          <div class="mb-5">
+          <div class="mb-6">
             <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
               How many in your party?
             </label>
-            <select name="party_size" id="party-size" onchange="updateGuestRows()"
-              class="form-input w-auto">
+            <select name="party_size" id="party-size" class="form-input w-auto">
               <option value="1">1 — Just me</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -185,18 +208,10 @@
             </select>
           </div>
 
-          <!-- Dynamic guest rows -->
-          <div class="mb-5">
-            <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-              Guest Details
-            </label>
-            <div id="guest-rows" class="space-y-3"></div>
-          </div>
-
           <!-- Dietary notes -->
           <div class="mb-6">
             <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-              Dietary Restrictions or Notes
+              Dietary Restrictions or Allergies
             </label>
             <textarea name="dietary_notes" rows="2"
               placeholder="Allergies, vegetarian, gluten-free, etc. — or leave blank"
@@ -280,29 +295,19 @@
 
     // ─────────────────────────────────────────────────────────────
     // ✅ FLIP THIS TO true WHEN READY TO OPEN RSVP
-    const RSVP_ENABLED = false;
+    const RSVP_ENABLED = true;
     // ─────────────────────────────────────────────────────────────
-
-    // ── Menu options — update these once restaurant is confirmed
-    const MENU_OPTIONS = [
-      { value: "",        label: "Select entrée…" },
-      { value: "tbd_a",   label: "Option A — TBD" },
-      { value: "tbd_b",   label: "Option B — TBD" },
-      { value: "tbd_c",   label: "Option C — TBD" },
-      { value: "veggie",  label: "Vegetarian option" },
-    ];
 
     // ── Apply RSVP tab state on load
     (function initRSVP() {
-      const tabBtn   = document.getElementById('tab-rsvp');
-      const tooltip  = document.getElementById('rsvp-tooltip');
+      const tabBtn  = document.getElementById('tab-rsvp');
+      const tooltip = document.getElementById('rsvp-tooltip');
       if (!RSVP_ENABLED) {
         tabBtn.classList.add('tab-disabled');
         tabBtn.disabled = true;
       } else {
         tooltip.style.display = 'none';
       }
-      updateGuestRows(); // build first guest row
     })();
 
     // ── Tab switching
@@ -319,36 +324,6 @@
         `w-full py-3 text-sm sm:text-base text-center px-2 focus:outline-none ` +
         (tab === 'rsvp' ? 'tab-active' : 'tab-inactive') +
         (!RSVP_ENABLED ? ' tab-disabled' : '');
-    }
-
-    // ── Build guest rows dynamically
-    function updateGuestRows() {
-      const count     = parseInt(document.getElementById('party-size').value) || 1;
-      const container = document.getElementById('guest-rows');
-      container.innerHTML = '';
-
-      for (let i = 1; i <= count; i++) {
-        const row = document.createElement('div');
-        row.className = 'guest-row bg-gray-50 rounded-lg p-3 border border-gray-100';
-
-        const nameWrap = document.createElement('div');
-        nameWrap.innerHTML = `
-          <label class="text-xs text-gray-500 mb-1 block">Guest ${i} Name</label>
-          <input type="text" name="guest_${i}_name"
-            placeholder="First name" ${i === 1 ? 'required' : ''}
-            class="form-input text-sm" />`;
-
-        const menuWrap = document.createElement('div');
-        const opts = MENU_OPTIONS.map(o =>
-          `<option value="${o.value}">${o.label}</option>`).join('');
-        menuWrap.innerHTML = `
-          <label class="text-xs text-gray-500 mb-1 block">Entrée Selection</label>
-          <select name="guest_${i}_menu" class="form-input text-sm">${opts}</select>`;
-
-        row.appendChild(nameWrap);
-        row.appendChild(menuWrap);
-        container.appendChild(row);
-      }
     }
 
     // ── Form submission
