@@ -5,8 +5,9 @@ Scope: A phased digital experience moving from "Save the Date" to a full RSVP/Me
 Stack: GitHub (hosting/code), Canva (design/visuals), Mobile-first Tailwind CSS.
 
 *important... pages should recognize that the dinner is hosted by Joaquin's Nana Rosita Apodaca
-*important... the dinner is at a restaurant (TBD) in Lafayette or Walnut Creek (near Orinda) — NOT at the high school
-*important... dinner is likely 7pm on May 28, 2026
+*important... dinner is at The Cooperage American Grille, 1342 Broadway Plaza, Walnut Creek, CA
+*important... dinner is 7pm on May 28, 2026
+*important... parking: garages near Macy's, or street parking on Main St near Lifetime
 
 ## URLs
 - Live Site:  https://phantomhook.github.io/JAG-Grad-2026/
@@ -26,8 +27,8 @@ Phase 1: Identity & GitHub Setup (Live "Save the Date" Landing Page). ✅ COMPLE
 - Footer: Celebrating Joaquin · With love from Nana Rosita Apodaca
 
 Phase 2: Engagement Features (Smart Calendar & Orinda Map).
-- Update calendar location once restaurant is confirmed
-- Add interactive map (Lafayette / Walnut Creek area)
+- Calendar location: ✅ Updated to The Cooperage, 1342 Broadway Plaza, Walnut Creek, CA
+- Add interactive map (The Cooperage, Walnut Creek)
 
 Phase 3: Conversion (RSVP Form & Menu Reveal).
 - Formspree endpoint: https://formspree.io/f/xpqjoqpk (wired, ready)
@@ -56,10 +57,10 @@ When restaurant + menu options are confirmed:
 1. Update menu options in index.html (~lines 274–280):
    Replace "Option A/B/C — TBD" with real dish names
 
-2. Update restaurant location in index.html (~line 373):
-   Replace "Lafayette / Walnut Creek, CA" with exact restaurant name + address
+2. Update restaurant location in index.html (~line 373): ✅ Done
+   "The Cooperage American Grille, 1342 Broadway Plaza, Walnut Creek, CA"
 
-3. Update calendar location (~line 374) with same address
+3. Update calendar location (~line 374): ✅ Done
 
 4. Set RSVP_ENABLED = true (~line 270)
 
