@@ -68,15 +68,21 @@
       border-color: #2D5A27;
       box-shadow: 0 0 0 3px rgba(45,90,39,0.12);
     }
-    .guest-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
+    .guest-check {
+      display: flex;
       align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: white;
+      color: #374151;
     }
-    @media (max-width: 480px) {
-      .guest-row { grid-template-columns: 1fr; }
-    }
+    .guest-check:hover { border-color: #2D5A27; background: #e8f0e7; }
+    .guest-check input[type="checkbox"] { accent-color: #2D5A27; width: 1rem; height: 1rem; cursor: pointer; }
   </style>
 </head>
 
@@ -193,19 +199,30 @@
             </div>
           </div>
 
-          <!-- Party size -->
+          <!-- Guest Checklist -->
           <div class="mb-6">
-            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-              How many in your party?
+            <label class="block text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">
+              Who's coming? <span class="normal-case font-normal text-gray-400">(check all that apply)</span>
             </label>
-            <select name="party_size" id="party-size" class="form-input w-auto">
-              <option value="1">1 — Just me</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6+</option>
-            </select>
+            <div class="grid grid-cols-2 gap-2">
+              <!-- Names — update JAG Guest 1/2/3 when confirmed -->
+              <!-- prettier-ignore -->
+              <label class="guest-check"><input type="checkbox" name="guests" value="Joaquin" /> Joaquin</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Gabriella" /> Gabriella</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Norman" /> Norman</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Graeme" /> Graeme</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Monica" /> Monica</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Jeanne" /> Jeanne</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Julian" /> Julian</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Oliver" /> Oliver</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Andrew" /> Andrew</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Marsia" /> Marsia</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Isabella" /> Isabella</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="Ivonne" /> Ivonne</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="JAG Guest 1" /> JAG Guest 1</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="JAG Guest 2" /> JAG Guest 2</label>
+              <label class="guest-check"><input type="checkbox" name="guests" value="JAG Guest 3" /> JAG Guest 3</label>
+            </div>
           </div>
 
           <!-- Dietary notes -->
