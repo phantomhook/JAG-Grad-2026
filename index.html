@@ -146,7 +146,14 @@
           Please RSVP by <strong>May 14, 2026</strong>. One submission per party is fine.
         </p>
         <div class="bg-forest-muted rounded-xl px-4 py-3 mb-6 text-sm text-forest space-y-1">
-          <div class="font-semibold">📍 The Cooperage American Grille</div>
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-semibold">📍 The Cooperage American Grille</div>
+            <a href="https://maps.google.com/?q=The+Cooperage+American+Grille,+1342+Broadway+Plaza,+Walnut+Creek,+CA"
+              target="_blank" rel="noopener"
+              class="shrink-0 text-xs font-semibold text-forest underline underline-offset-2 hover:text-forest-light">
+              Get Directions ↗
+            </a>
+          </div>
           <div class="text-xs text-gray-600">1342 Broadway Plaza, Walnut Creek, CA · 7:00 PM</div>
           <div class="text-xs text-gray-500 pt-1 border-t border-forest/10 mt-1">
             <span class="font-medium text-gray-600">Parking:</span> Garages near Macy's · Street parking on Main St near Lifetime
@@ -222,6 +229,21 @@
   <footer class="bg-white border-t border-gray-100 py-6 px-4">
     <div class="max-w-2xl mx-auto flex flex-col items-center gap-4">
 
+      <!-- Footer buttons -->
+      <div class="flex gap-3 flex-wrap justify-center">
+
+      <!-- RSVP & Menu shortcut (only shown when RSVP enabled) -->
+      <button id="btn-rsvp-footer"
+        class="btn-forest text-white font-semibold rounded-full
+               px-8 py-3 text-sm flex items-center gap-2 shadow-md"
+        onclick="switchTab('rsvp')"
+        aria-label="Go to RSVP and Menu">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        RSVP &amp; Menu
+      </button>
+
       <!-- Add to Calendar -->
       <div class="relative" id="cal-wrapper">
         <button class="btn-forest text-white font-semibold rounded-full
@@ -263,6 +285,8 @@
         </div>
       </div>
 
+      </div><!-- end footer buttons -->
+
       <p class="text-xs text-gray-400 text-center">
         Celebrating Joaquin &nbsp;·&nbsp; Miramonte High School Class of 2026<br/>
         With love from Nana Rosita Apodaca
@@ -280,11 +304,13 @@
 
     // ── Apply RSVP tab state on load
     (function initRSVP() {
-      const tabBtn  = document.getElementById('tab-rsvp');
-      const tooltip = document.getElementById('rsvp-tooltip');
+      const tabBtn     = document.getElementById('tab-rsvp');
+      const tooltip    = document.getElementById('rsvp-tooltip');
+      const footerBtn  = document.getElementById('btn-rsvp-footer');
       if (!RSVP_ENABLED) {
         tabBtn.classList.add('tab-disabled');
         tabBtn.disabled = true;
+        footerBtn.style.display = 'none';
       } else {
         tooltip.style.display = 'none';
       }
